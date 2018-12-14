@@ -91,6 +91,7 @@ frappe.ui.form.on('App', {
 					}
 				});
 			});
+			
 			frm.add_custom_button(__('Track Remote'), function(){
 				frappe.call({
 					method: 'bench_manager.bench_manager.doctype.app.app.get_remotes',
