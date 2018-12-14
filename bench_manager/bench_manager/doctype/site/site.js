@@ -19,18 +19,6 @@ frappe.ui.form.on('Site', {
 		}
 	},
 	refresh: function(frm) {
-		frm.add_custom_button(__('Equis de button to equis de in the console'), function(){
-				frappe.call({
-					method: 'bench_manager.api.mysql_call',
-					args: {
-						doc: frm.doc.name,
-					},
-					btn: this,
-					callback: function(r) {
-						console.log("Equis de in the console")
-					}
-				});
-			});
 		$('a.grey-link:contains("Delete")').hide();
 		if (frm.doc.db_name == undefined) $('div.form-inner-toolbar').hide();
 		else $('div.form-inner-toolbar').show();
