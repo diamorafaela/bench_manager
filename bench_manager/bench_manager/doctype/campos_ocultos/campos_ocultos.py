@@ -6,6 +6,8 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 from bench_manager.api import set_conection
+from bench_manager.bench_manager.utils import run_command
+import datetime
 
 
 class Camposocultos(Document):
@@ -22,3 +24,4 @@ class Camposocultos(Document):
                           """.format(campo.oculto, self.doctype_ex, campo.campo))
         frappe.db.commit()
         set_conection(us, pa)
+        run_command(['bench --site {} clear-cache'.format(self.sitio)], self.doctype, unicode(datetime.datetime.now()), docname=self.name)

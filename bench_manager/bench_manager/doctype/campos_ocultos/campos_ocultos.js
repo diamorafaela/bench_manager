@@ -15,7 +15,6 @@ frappe.ui.form.on('Campos ocultos', {
 		if(frm.fields_dict.doctype_ex.get_value()){
 			doctype_ex_func(frm);
 		}
-		console.log("refresh")
 	},
 });
 frappe.ui.form.on('Campos ocultos campos', {
@@ -23,7 +22,6 @@ frappe.ui.form.on('Campos ocultos campos', {
 		campo_func(frm, cdt, cdn)
 	},
 	campos_add: function(frm){
-		console.log("adds");
 		doctype_ex_func(frm);
 	},
 });
@@ -48,7 +46,6 @@ function doctype_ex_func(frm){
 		if(r.message){
 			for(var a in cur_frm.fields_dict["campos"].grid.grid_rows_by_docname){
 				frappe.utils.filter_dict(cur_frm.fields_dict["campos"].grid.grid_rows_by_docname[a].docfields, {"fieldname": "campo"})[0].options=r.message;
-				//console.log(cur_frm.fields_dict["campos"].grid.grid_rows_by_docname[a]);
 				//cur_frm.fields_dict["campos"].grid.grid_rows_by_docname[a].get_field("campo").refresh();
 			}
 		}
