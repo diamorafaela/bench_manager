@@ -7,10 +7,7 @@ frappe.ui.form.on('Campos ocultos', {
 	},
 	doctype_ex: function(frm){
 		doctype_ex_func(frm);
-	},
-	campo: function(frm){
-		doctype_ex_func(frm);
-	},
+	},	
 	refresh: function(frm) {
 		if(frm.fields_dict.sitio.get_value()){
 			sitio_func(frm);
@@ -18,12 +15,17 @@ frappe.ui.form.on('Campos ocultos', {
 		if(frm.fields_dict.doctype_ex.get_value()){
 			doctype_ex_func(frm);
 		}
-	}
+		console.log("refresh")
+	},
 });
 frappe.ui.form.on('Campos ocultos campos', {
 	campo: function(frm, cdt, cdn){
 		campo_func(frm, cdt, cdn)
-	}
+	},
+	campos_add: function(frm){
+		console.log("adds");
+		doctype_ex_func(frm);
+	},
 });
 function campo_func(frm,cdt,cdn){
 	frappe.call({
@@ -46,7 +48,8 @@ function doctype_ex_func(frm){
 		if(r.message){
 			for(var a in cur_frm.fields_dict["campos"].grid.grid_rows_by_docname){
 				frappe.utils.filter_dict(cur_frm.fields_dict["campos"].grid.grid_rows_by_docname[a].docfields, {"fieldname": "campo"})[0].options=r.message;
-				cur_frm.fields_dict["campos"].grid.grid_rows_by_docname[a].get_field("campo").refresh();
+				//console.log(cur_frm.fields_dict["campos"].grid.grid_rows_by_docname[a]);
+				//cur_frm.fields_dict["campos"].grid.grid_rows_by_docname[a].get_field("campo").refresh();
 			}
 		}
 	}});
