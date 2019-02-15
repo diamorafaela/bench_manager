@@ -196,16 +196,15 @@ frappe.ui.form.on('Site', {
 							},
 							async: false,
 							callback: function(r) {
-								console.log("Equis de")
 								let key = frappe.datetime.get_datetime_as_string();
 								console_dialog(key);
 								frm.call("console_command", {
 									key: key,
 									caller: "migrate",
+									after_command: 1,
 								}, () => {
 									dialog.hide();
 								});
-								console.log("Equis de")
 							}
 						})
 

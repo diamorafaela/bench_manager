@@ -123,7 +123,7 @@ class Site(Document):
         else:
             self.console_command(key=key, caller='create-alias', alias=alias)
 
-    def console_command(self, key, caller, alias=None, app_name=None, admin_password=None, mysql_password=None):
+    def console_command(self, key, caller, alias=None, app_name=None, admin_password=None, mysql_password=None, after_command=None):
         site_abspath = None
         if alias:
             site_abspath = os.path.abspath(os.path.join(self.name))
@@ -141,7 +141,8 @@ class Site(Document):
             commands=commands[caller],
             doctype=self.doctype,
             key=key,
-            docname=self.name
+            docname=self.name,
+            after_command=after_command
         )
         return "executed"
 
