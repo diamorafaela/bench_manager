@@ -196,6 +196,7 @@ frappe.ui.form.on('Site', {
 							},
 							async: false,
 							callback: function(r) {
+								console.log("Equis de")
 								let key = frappe.datetime.get_datetime_as_string();
 								console_dialog(key);
 								frm.call("console_command", {
@@ -204,6 +205,7 @@ frappe.ui.form.on('Site', {
 								}, () => {
 									dialog.hide();
 								});
+								console.log("Equis de")
 							}
 						})
 

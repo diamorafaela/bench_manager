@@ -232,6 +232,7 @@ def create_site(site_name, install_erpnext, mysql_password, admin_password, key)
 
 @frappe.whitelist()
 def hardcore_migrate(site_name, app_name):
+    verify_whitelisted_call()
     site = frappe.get_doc("Site", site_name)
     us = site.db_name
     pa = site.get_password('db_password')
