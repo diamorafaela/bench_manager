@@ -230,7 +230,7 @@ def create_site(site_name, install_erpnext, mysql_password, admin_password, key)
     doc.insert()
     frappe.db.commit()
 
-
+@frappe.whitelist()
 def hardcore_migrate(site_name, app_name):
     site = frappe.get_doc("Site", site_name)
     us = site.db_name
