@@ -243,7 +243,8 @@ def hardcore_migrate(site_name, app_name):
                                join `tabModule Def` md on md.name = dt.module
                     WHERE md.app_name = '{}'
                   """.format(app_name))
-    frappe.db.sql("""TRUNCATE TABLE `tabCustom Field`""")
+    frappe.db.commit()
+    frappe.db.sql("""TRUNCATE TABLE `tabCustom Field`""", auto_commit=True)
     frappe.db.sql("""DELETE dt from `tabDocType` dt
                                join `tabModule Def` md on md.name = dt.module
                     WHERE md.app_name = '{}'
