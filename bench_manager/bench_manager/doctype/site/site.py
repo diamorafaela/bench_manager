@@ -128,7 +128,7 @@ class Site(Document):
         if alias:
             site_abspath = os.path.abspath(os.path.join(self.name))
         commands = {
-            "migrate": ["bench --site {site_name} migrate".format(site_name=self.name)],
+            "migrate": ["bench --site {site_name} migrate".format(site_name=self.name), 'bench --site {site_name} clear-cache'.format(site_name=self.name)],
             "create-alias": ["ln -s {site_abspath} sites/{alias}".format(site_abspath=site_abspath, alias=alias)],
             "delete-alias": ["rm sites/{alias}".format(alias=alias)],
             "backup": ["bench --site {site_name} backup --with-files".format(site_name=self.name)],
@@ -251,4 +251,3 @@ def hardcore_migrate(site_name, app_name):
                   """.format(app_name))
     frappe.db.commit()
     set_conection(us, pa)
-    run_command(['bench --site {} clear-cache'.format(site_name)], "Site", unicode(datetime.datetime.now()), docname=site_name)
