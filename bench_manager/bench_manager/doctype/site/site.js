@@ -172,6 +172,46 @@ frappe.ui.form.on('Site', {
 				}
 			});
 		});
+		frm.add_custom_button(__('Hardcore Migrate'), function(){
+			frappe.call({
+				method: 'bench_manager.bench_manager.doctype.site.site.get_removable_apps',
+				args: {
+					doctype: frm.doctype,
+					docname: frm.doc.name
+				},
+				btn: this,
+				callback: function(r) {
+					var dialog = new frappe.ui.Dialog({
+						title: 'Select App',
+						fields: [
+							{'fieldname': 'apps', 'fieldtype': 'Select', options: r.message},
+						]
+					});
+					dialog.set_primary_action(__("HaRdCoRe"), () => {
+						frappe.call({
+							method: 'bench_manager.bench_manager.doctype.site.site.hardcore_migrate',
+							args: {
+								site_name: frm.doc.name,
+								app_name: dialog.fields_dict.apps.value
+							},
+							async: false,
+							callback: function(r) {
+								let key = frappe.datetime.get_datetime_as_string();
+								console_dialog(key);
+								frm.call("console_command", {
+									key: key,
+									caller: "migrate",
+								}, () => {
+									dialog.hide();
+								});
+							}
+						})
+
+					});
+					dialog.show();
+				}
+			});
+		});
 		frm.add_custom_button(__('Drop Site'), function(){
 			frappe.call({
 				method: 'bench_manager.bench_manager.doctype.site.site.pass_exists',
