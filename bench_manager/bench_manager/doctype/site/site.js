@@ -203,7 +203,13 @@ frappe.ui.form.on('Site', {
 									caller: "migrate",
 									after_command: 1,
 								}, () => {
-									dialog.hide();
+									frm.call("console_command", {
+										key: key,
+										caller: "restart",
+										after_command: 1,
+									}, () => {
+										dialog.hide();
+									});
 								});
 							}
 						})

@@ -128,7 +128,8 @@ class Site(Document):
         if alias:
             site_abspath = os.path.abspath(os.path.join(self.name))
         commands = {
-            "migrate": ["bench --site {site_name} migrate".format(site_name=self.name), 'bench --site {site_name} clear-cache'.format(site_name=self.name), "bench restart"],
+            "migrate": ["bench --site {site_name} migrate".format(site_name=self.name), 'bench --site {site_name} clear-cache'.format(site_name=self.name)],
+            "restart": ["bench restart"],
             "create-alias": ["ln -s {site_abspath} sites/{alias}".format(site_abspath=site_abspath, alias=alias)],
             "delete-alias": ["rm sites/{alias}".format(alias=alias)],
             "backup": ["bench --site {site_name} backup --with-files".format(site_name=self.name)],
@@ -138,12 +139,12 @@ class Site(Document):
             "drop_site": ["bench drop-site {site_name} --root-password {mysql_password}".format(site_name=self.name, mysql_password=mysql_password)]
         }
         frappe.enqueue('bench_manager.bench_manager.utils.run_command',
-            commands=commands[caller],
-            doctype=self.doctype,
-            key=key,
-            docname=self.name,
-            after_command=after_command
-        )
+                       commands=commands[caller],
+                       doctype=self.doctype if caller != "restart" else caller,
+                       key=key,
+                       docname=self.name,
+                       after_command=after_command
+                       )
         return "executed"
 
 

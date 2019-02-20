@@ -17,25 +17,30 @@ def run_command(commands, doctype, key, cwd='..', docname=' ', after_command=Non
     sensitive_data = ["--mariadb-root-password", "--admin-password", "--root-password"]
     for password in sensitive_data:
         logged_command = re.sub("{password} .*? ".format(password=password), '', logged_command, flags=re.DOTALL)
-    doc = frappe.get_doc({'doctype': 'Bench Manager Command', 'key': key, 'source': doctype+': '+docname,
-        'command': logged_command, 'console': console_dump, 'status': 'Ongoing'})
-    doc.insert()
-    frappe.db.commit()
-    frappe.publish_realtime(key, "Executing Command:\n{logged_command}\n\n".format(logged_command=logged_command), user=frappe.session.user)
+    if doctype != "restart":
+        doc = frappe.get_doc({'doctype': 'Bench Manager Command', 'key': key, 'source': doctype+': '+docname,
+            'command': logged_command, 'console': console_dump, 'status': 'Ongoing'})
+        doc.insert()
+        frappe.db.commit()
+        frappe.publish_realtime(key, "Executing Command:\n{logged_command}\n\n".format(logged_command=logged_command), user=frappe.session.user)
     try:
         for command in commands:
             terminal = Popen(shlex.split(command), stdin=PIPE, stdout=PIPE, stderr=STDOUT, cwd=cwd)
-            for c in iter(lambda: safe_decode(terminal.stdout.read(1)), ''):
-                frappe.publish_realtime(key, c, user=frappe.session.user)
-                console_dump += c
-        if terminal.wait():
-            _close_the_doc(start_time, key, console_dump, status='Failed', user=frappe.session.user)
-        else:
-            _close_the_doc(start_time, key, console_dump, status='Success', user=frappe.session.user)
+            if doctype != "restart":
+                for c in iter(lambda: safe_decode(terminal.stdout.read(1)), ''):
+                    frappe.publish_realtime(key, c, user=frappe.session.user)
+                    console_dump += c
+        if doctype != "restart":
+            if terminal.wait():
+                _close_the_doc(start_time, key, console_dump, status='Failed', user=frappe.session.user)
+            else:
+                _close_the_doc(start_time, key, console_dump, status='Success', user=frappe.session.user)
     except Exception as e:
-        _close_the_doc(start_time, key, "{} \n\n{}".format(e, console_dump), status='Failed', user=frappe.session.user)
+        if doctype != "restart":
+            _close_the_doc(start_time, key, "{} \n\n{}".format(e, console_dump), status='Failed', user=frappe.session.user)
     finally:
-        frappe.db.commit()
+        if doctype != "restart":
+            frappe.db.commit()
         # hack: frappe.db.commit() to make sure the log created is robust,
         # and the _refresh throws an error if the doc is deleted 
         if not after_command:
