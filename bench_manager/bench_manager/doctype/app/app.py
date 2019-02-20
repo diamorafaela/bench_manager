@@ -104,7 +104,7 @@ class App(Document):
             "new_branch": ["git branch {branch_name}".format(branch_name=branch_name)],
             "delete_branch": ["git branch -D {branch_name}".format(branch_name=branch_name)],
             "git_fetch": ["git fetch --all"],
-            "track-remote": ["find . -name '*.pyc' -exec rm -f {} \\; && git checkout -b {branch_name} -t {remote}".format(branch_name=branch_name, remote=remote)],
+            "track-remote": ["git checkout -b {branch_name} -t {remote}".format(branch_name=branch_name, remote=remote), "find . -name '*.pyc' -exec rm -f {} \\;"],
             "pull-rebase": ["git pull --rebase {remote} {branch_name}".format(branch_name=branch_name, remote=remote)],
             "clear_pyc": ["find . -name '*.pyc' -exec rm -f {} \\;"],
             "commit": ["git add .", 'git commit -m "{commit_msg}"'.format(commit_msg=commit_msg)],

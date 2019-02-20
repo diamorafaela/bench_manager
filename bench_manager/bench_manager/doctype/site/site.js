@@ -69,6 +69,13 @@ frappe.ui.form.on('Site', {
 			frm.call("console_command", {
 				key: key,
 				caller: "migrate",
+				after_command: 1,
+			}, () => {
+				frm.call("console_command", {
+					key: key,
+					caller: "restart",
+					after_command: 1,
+				}});
 			});
 		});
 		frm.add_custom_button(__("Backup"), function() {
