@@ -95,17 +95,17 @@ class App(Document):
     def pull_rebase(self, key, remote):
         remote, branch_name = remote.split('/')
         self.console_command(key=key, caller='pull-rebase', branch_name=branch_name, remote=remote)
-        self.console_command(key=key, caller='clear_pyc', branch_name=branch_name, remote=remote)
+        # self.console_command(key=key, caller='clear_pyc', branch_name=branch_name, remote=remote)
 
     def console_command(self, key, caller, branch_name=None, remote=None, commit_msg=None):
         commands = {
             "git_init": ["git init", "git add .", "git commit -m 'Initial Commit'"],
-            "switch_branch": ["git checkout {branch_name}".format(branch_name=branch_name)],
+            "switch_branch": ["git checkout {branch_name}".format(branch_name=branch_name), "find . -name '*.pyc' -exec rm -f {} \\;"],
             "new_branch": ["git branch {branch_name}".format(branch_name=branch_name)],
             "delete_branch": ["git branch -D {branch_name}".format(branch_name=branch_name)],
             "git_fetch": ["git fetch --all"],
             "track-remote": ["git checkout -b {branch_name} -t {remote}".format(branch_name=branch_name, remote=remote), "find . -name '*.pyc' -exec rm -f {} \\;"],
-            "pull-rebase": ["git pull --rebase {remote} {branch_name}".format(branch_name=branch_name, remote=remote)],
+            "pull-rebase": ["git pull --rebase {remote} {branch_name}".format(branch_name=branch_name, remote=remote), "find . -name '*.pyc' -exec rm -f {} \\;"],
             "clear_pyc": ["find . -name '*.pyc' -exec rm -f {} \\;"],
             "commit": ["git add .", 'git commit -m "{commit_msg}"'.format(commit_msg=commit_msg)],
             "stash": ["git add .", "git stash"],
