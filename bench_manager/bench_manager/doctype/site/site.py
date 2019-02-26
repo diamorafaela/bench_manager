@@ -251,5 +251,9 @@ def hardcore_migrate(site_name, app_name):
                                join `tabModule Def` md on md.name = dt.module
                     WHERE md.app_name = '{}'
                   """.format(app_name))
+    frappe.db.sql("""DELETE dt from `tabPrint Format` dt
+                               join `tabModule Def` md on md.name = dt.module
+                    WHERE md.app_name = '{}'
+                  """.format(app_name))
     frappe.db.commit()
     set_conection(us, pa)
