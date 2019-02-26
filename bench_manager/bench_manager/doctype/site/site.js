@@ -75,7 +75,7 @@ frappe.ui.form.on('Site', {
 					key: key,
 					caller: "restart",
 					after_command: 1,
-				}});
+				});
 			});
 		});
 		frm.add_custom_button(__("Backup"), function() {
