@@ -239,7 +239,12 @@ def hardcore_migrate(site_name, app_name):
     us = site.db_name
     pa = site.get_password('db_password')
     us, pa = set_conection(us, pa)
-
+    frappe.db.sql("""DELETE dp from `tabDocPerm` dp
+                               join `tabDocType` dt on dp.parent = dt.name
+                               join `tabModule Def` md on md.name = dt.module
+                    WHERE md.app_name = '{}'
+                  """.format(app_name))
+    frappe.db.commit()
     frappe.db.sql("""DELETE df from `tabDocField` df
                                join `tabDocType` dt on df.parent = dt.name
                                join `tabModule Def` md on md.name = dt.module
