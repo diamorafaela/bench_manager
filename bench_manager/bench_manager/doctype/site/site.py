@@ -38,7 +38,8 @@ class Site(Document):
             self.developer_flag = 0
         else:
             if self.developer_flag == 0:
-                self.update_site_config()
+                # self.
+                ()
                 self.sync_site_config()
 
     def after_command(self, commands=None):
@@ -66,34 +67,35 @@ class Site(Document):
         return safe_decode(list_apps).strip('\n').split('\n')
 
     def update_site_config(self):
-        site_config_path = os.path.join(self.site_name, 'site_config.json')
-        common_site_config_path = os.path.join('common_site_config.json')
+        pass
+        # site_config_path = os.path.join(self.site_name, 'site_config.json')
+        # common_site_config_path = os.path.join('common_site_config.json')
 
-        with open(site_config_path, 'r') as f:
-            site_config_data = json.load(f)
-        with open(common_site_config_path, 'r') as f:
-            common_site_config_data = json.load(f)
+        # with open(site_config_path, 'r') as f:
+            # site_config_data = json.load(f)
+        # with open(common_site_config_path, 'r') as f:
+            # common_site_config_data = json.load(f)
 
-        editable_site_config_fields = ["maintenance_mode", "pause_scheduler",
-            "developer_mode", "disable_website_cache"]
+        # editable_site_config_fields = ["maintenance_mode", "pause_scheduler",
+            # "developer_mode", "disable_website_cache"]
 
-        for site_config_field in editable_site_config_fields:
-            if self.get_attr(site_config_field) == None or self.get_attr(site_config_field) == '':
-                if site_config_data.get(site_config_field) != None:
-                    site_config_data.pop(site_config_field)
-                self.set_attr(site_config_field,
-                    common_site_config_data.get(site_config_field))
+        # for site_config_field in editable_site_config_fields:
+            # if self.get_attr(site_config_field) == None or self.get_attr(site_config_field) == '':
+                # if site_config_data.get(site_config_field) != None:
+                    # site_config_data.pop(site_config_field)
+                # self.set_attr(site_config_field,
+                    # common_site_config_data.get(site_config_field))
 
-            elif (not common_site_config_data.get(site_config_field) or self.get_attr(site_config_field) != common_site_config_data[site_config_field]):
-                site_config_data[site_config_field] = self.get_attr(site_config_field)
+            # elif (not common_site_config_data.get(site_config_field) or self.get_attr(site_config_field) != common_site_config_data[site_config_field]):
+                # site_config_data[site_config_field] = self.get_attr(site_config_field)
 
-            elif self.get_attr(site_config_field) == common_site_config_data[site_config_field]:
-                if site_config_data.get(site_config_field) != None:
-                    site_config_data.pop(site_config_field)
+            # elif self.get_attr(site_config_field) == common_site_config_data[site_config_field]:
+                # if site_config_data.get(site_config_field) != None:
+                    # site_config_data.pop(site_config_field)
 
-            os.remove(site_config_path)
-            with open(site_config_path, 'w') as f:
-                    json.dump(site_config_data, f, indent=4)
+            # os.remove(site_config_path)
+            # with open(site_config_path, 'w') as f:
+                    # json.dump(site_config_data, f, indent=4)
 
     def sync_site_config(self):
         if os.path.isfile(self.site_name+'/site_config.json'):
